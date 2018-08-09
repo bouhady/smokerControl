@@ -11,7 +11,6 @@
 #include <WiFi.h>
 #include <WiFiMulti.h>
 #include <HTTPClient.h>
-#include <IOXhop_FirebaseESP32.h>
 
 WiFiMulti wifiMulti;
 
@@ -50,19 +49,11 @@ void setup() {
   adc1_config_width(ADC_WIDTH_12Bit);
   adc1_config_channel_atten(ADC1_CHANNEL_0, ADC_ATTEN_11db);
   
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  Serial.print("connecting");
-  while (WiFi.status() != WL_CONNECTED) {
-    Serial.print(".");
-    delay(500);
-  }
+  wifiMulti.addAP(WIFI_SSID, WIFI_PASSWORD);
 
   Serial.println();
   Serial.print("connected: ");
-  Serial.println(WiFi.localIP());
   
-  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
-
   initGraph();
 }
 
