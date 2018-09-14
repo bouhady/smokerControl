@@ -48,12 +48,12 @@ void setup() {
   //  pinMode(ANALOG_PIN_0, INPUT);
   adc1_config_width(ADC_WIDTH_12Bit);
   adc1_config_channel_atten(ADC1_CHANNEL_0, ADC_ATTEN_11db);
-  
+
   wifiMulti.addAP(WIFI_SSID, WIFI_PASSWORD);
 
   Serial.println();
   Serial.print("connected: ");
-  
+
   initGraph();
 }
 
@@ -68,7 +68,7 @@ void updateDataToCloud(int data, float temperture) {
   if ((wifiMulti.run() == WL_CONNECTED)) {
     HTTPClient http;
     Serial.println("adc : " + String(data));
-    http.begin("https://api.thingspeak.com/update?api_key="+ String(THINGSPEAK_KEY) +"&field1=" + String(data) + "&field2=" + String(temperture)); //HTTP
+    http.begin("http://us-central1-smokingcontroller.cloudfunctions.net/tempUpdate?temperture1=" + String(temperture)); //HTTP
     int httpCode = http.GET();
     http.end();
   }
@@ -94,7 +94,7 @@ void loop() {
   temp_celsius = (adcval * 0.0424) + 6 ;
 
 
-  if (counter > 15) {
+  if (counter > 3) {
     updateDataToCloud(adcval, temp_celsius);
     counter = 0;
   }
@@ -104,7 +104,7 @@ void loop() {
   //  display.drawString(64, 50, "Temperture :" + String(temp_celsius));
   //  display.drawString(64, 54, "Voltage :" + String(voltage));
   display.drawString(64, 54, "Temperture :" + String(temp_celsius));
-  display.drawString(64, 0, "adc :" + String(adcval));
+  display.drawString(64, 0, "FB - adc :" + String(adcval));
   // draw the current demo method
   //  drawImageDemo();
 
